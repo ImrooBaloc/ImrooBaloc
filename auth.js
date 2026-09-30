@@ -5,6 +5,21 @@ const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 const authForms = document.querySelectorAll('[data-auth-form]');
 let supabase;
 
+authForms.forEach((form) => {
+  if (form.dataset.authForm !== 'signup') return;
+
+  const password = form.elements.password;
+  const confirmPassword = form.elements.confirm_password;
+  const validatePasswords = () => {
+    confirmPassword.setCustomValidity(
+      password.value === confirmPassword.value ? '' : 'Passwords do not match.',
+    );
+  };
+
+  password.addEventListener('input', validatePasswords);
+  confirmPassword.addEventListener('input', validatePasswords);
+});
+
 function showStatus(form, message, isError = false) {
   const status = form.querySelector('[data-auth-status]');
   status.textContent = message;
@@ -31,12 +46,17 @@ if (!supabaseUrl || !supabaseKey) {
         let result;
 
         if (mode === 'signup') {
+          const firstName = formData.get('first_name').trim();
+          const lastName = formData.get('last_name').trim();
           result = await supabase.auth.signUp({
             email: formData.get('email'),
             password: formData.get('password'),
             options: {
               data: {
-                full_name: formData.get('full_name'),
+                first_name: firstName,
+                last_name: lastName,
+                full_name: `${firstName} ${lastName}`,
+                username: formData.get('username').trim().toLowerCase(),
                 preferred_language: formData.get('preferred_language') || 'en',
               },
               emailRedirectTo: `${window.location.origin}/login.html`,

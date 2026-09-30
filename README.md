@@ -7,7 +7,7 @@ Local development
 The Supabase publishable/anon key is intended for browser use. Never add a Supabase service-role key to a VITE_* variable or commit it to the repository. Access to database rows must be controlled with row-level security.
 Supabase setup
 1.	Create a Supabase project and configure its Auth email provider.
-2.	Apply supabase/migrations/20260930000000_create_profiles.sql in the Supabase SQL Editor. It creates a profile for each new auth user and restricts profile reads and updates to that user.
+2.	Apply supabase/migrations/20260930000000_create_profiles.sql and supabase/migrations/20260930010000_add_signup_profile_fields.sql in the Supabase SQL Editor. They create profiles, store signup names and unique usernames, and restrict profile reads and updates to that user.
 3.	In Authentication > URL Configuration, set the Site URL to your production domain, such as https://qalamkar.example.
 4.	Add https://qalamkar.example/login.html and https://qalamkar.example/reset-password.html to the allowed redirect URLs. Add the corresponding Vercel preview URLs if you use preview deployments.
 Vercel setup
